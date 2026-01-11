@@ -1,0 +1,475 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8" />
+  <!-- Mobilde tam ekran ve zoomsuz görünüm -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+  <title>MetroVagon – Prototip</title>
+  <style>
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      padding: 0;
+      background: #f3f4f6;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "SF Pro Text",
+        "Segoe UI", sans-serif;
+      width: 100%;
+      min-height: 100vh;
+    }
+
+    .app {
+      width: 100%;
+      max-width: 100%;
+      padding: 12px 12px 20px;
+    }
+
+    .app-header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 16px;
+    }
+    .app-icon {
+      width: 34px;
+      height: 34px;
+      border-radius: 10px;
+      background: linear-gradient(135deg, #2563eb, #1d4ed8);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-size: 20px;
+    }
+    h1 {
+      font-size: 22px;
+      margin: 0;
+    }
+    .subtitle {
+      font-size: 12px;
+      color: #6b7280;
+      margin-bottom: 16px;
+    }
+
+    .card {
+      background: white;
+      border-radius: 16px;
+      padding: 14px 14px 18px;
+      box-shadow: 0 10px 25px rgba(15,23,42,0.12);
+      border: 1px solid #e5e7eb;
+    }
+
+    label {
+      display: block;
+      font-size: 13px;
+      color: #374151;
+      margin-bottom: 4px;
+      font-weight: 500;
+    }
+    .input {
+      width: 100%;
+      padding: 8px 10px;
+      border-radius: 10px;
+      border: 1px solid #d1d5db;
+      background: #f9fafb;
+      font-size: 14px;
+      margin-bottom: 10px;
+    }
+    .row {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+    .field {
+      flex: 1;
+      min-width: 150px;
+    }
+
+    .section-title {
+      font-size: 13px;
+      font-weight: 600;
+      color: #111827;
+      margin-top: 10px;
+      margin-bottom: 4px;
+    }
+    .radio-group {
+      border-radius: 12px;
+      background: #f9fafb;
+      border: 1px solid #e5e7eb;
+      padding: 8px 10px;
+      margin-bottom: 12px;
+    }
+    .radio-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 4px 0;
+      font-size: 13px;
+      color: #111827;
+    }
+    .radio-item input[type="radio"] {
+      width: 16px;
+      height: 16px;
+      accent-color: #2563eb;
+    }
+
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 10px;
+      border-radius: 999px;
+      background: #eff6ff;
+      color: #1d4ed8;
+      font-size: 11px;
+      margin-top: 6px;
+      margin-bottom: 4px;
+    }
+    .pill-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 999px;
+      background: #1d4ed8;
+    }
+
+    .btn-primary {
+      margin-top: 10px;
+      width: 100%;
+      padding: 11px 0;
+      border-radius: 999px;
+      border: none;
+      background: #2563eb;
+      color: white;
+      font-weight: 600;
+      font-size: 14px;
+      cursor: pointer;
+    }
+    .btn-primary:hover {
+      background: #1d4ed8;
+    }
+
+    .result-card {
+      margin-top: 14px;
+      padding: 10px 12px 12px;
+      border-radius: 14px;
+      background: #f9fafb;
+      border: 1px solid #e5e7eb;
+      font-size: 13px;
+      line-height: 1.5;
+    }
+    .result-card b {
+      color: #111827;
+    }
+
+    /* Tren görünümü (eski sade tasarım) */
+    .train-card {
+      margin-top: 10px;
+      padding: 12px;
+      background: #eff6ff;
+      border-radius: 14px;
+      border: 1px solid #dbeafe;
+    }
+    .train-title {
+      font-size: 13px;
+      margin-bottom: 8px;
+      color: #111827;
+      text-align: center;
+      font-weight: 600;
+    }
+    .train {
+      display: flex;
+      gap: 4px;
+      padding: 8px;
+      border-radius: 10px;
+      background: #dbeafe;
+      align-items: center;
+      justify-content: center;
+    }
+    .car {
+      width: 26px;
+      height: 16px;
+      border-radius: 4px;
+      background: #bfdbfe;
+      position: relative;
+      overflow: hidden;
+    }
+    .car::before {
+      content: "";
+      position: absolute;
+      left: 3px;
+      right: 3px;
+      top: 4px;
+      height: 7px;
+      border-radius: 3px;
+      background: rgba(255,255,255,0.95);
+    }
+    .car.active {
+      background: #2563eb;
+    }
+    .car.active::before {
+      background: rgba(255,255,255,1);
+    }
+    .train-direction {
+      text-align: center;
+      font-size: 11px;
+      margin-top: 6px;
+      color: #374151;
+    }
+    .train-caption {
+      text-align: center;
+      font-size: 11px;
+      margin-top: 4px;
+      color: #1f2933;
+    }
+
+    .muted {
+      font-size: 11px;
+      color: #6b7280;
+      margin-top: 6px;
+    }
+  </style>
+</head>
+<body>
+<div class="app">
+  <div class="app-header">
+    <div class="app-icon">🚇</div>
+    <div>
+      <h1>MetroVagon</h1>
+      <div class="subtitle">İniş istasyonunda hangi vagonda olman gerektiğini gösteren prototip.</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="row">
+      <div class="field">
+        <label for="startStation">Başlangıç istasyonu</label>
+        <select id="startStation" class="input">
+          <option value="VEZNECILER">M2 – Vezneciler</option>
+          <option value="YENIKAPI">M2 – Yenikapı</option>
+        </select>
+      </div>
+      <div class="field">
+        <label for="endStation">İniş istasyonu</label>
+        <select id="endStation" class="input">
+          <option value="VEZNECILER">M2 – Vezneciler</option>
+          <option value="YENIKAPI" selected>M2 – Yenikapı</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="pill" id="directionPill">
+      <span class="pill-dot"></span>
+      Tren bu yönde gidiyor: ➜➜➜➜➜
+    </div>
+
+    <div class="section-title">Hedef</div>
+    <div class="radio-group">
+      <label class="radio-item">
+        <input type="radio" name="mode" value="escalator" checked />
+        <span>Yürüyen merdivene en yakın vagon</span>
+      </label>
+      <label class="radio-item">
+        <input type="radio" name="mode" value="elevator" />
+        <span>Asansöre en yakın vagon</span>
+      </label>
+      <label class="radio-item">
+        <input type="radio" name="mode" value="exit" />
+        <span>Çıkışa en yakın vagon</span>
+      </label>
+      <label class="radio-item">
+        <input type="radio" name="mode" value="transfer" />
+        <span>Aktarmaya en yakın vagon</span>
+      </label>
+    </div>
+
+    <button class="btn-primary" id="calcBtn">En uygun vagunu bul</button>
+
+    <div id="result" class="result-card" style="display:none;"></div>
+
+    <div id="trainCard" class="train-card" style="display:none;">
+      <div class="train-title" id="trainTitle">En uygun vagon:</div>
+      <div class="train" id="trainCars"></div>
+      <div class="train-direction" id="trainDirection">Tren bu yönde gidiyor: ➜➜➜➜➜</div>
+      <div class="train-caption">Mavi vagon, inmen gereken yerde seni en iyi konumlandıran vagondur.</div>
+    </div>
+
+    <div class="muted">
+      Not: Şimdilik tek hat (M2) ve iki istasyon (Vezneciler &amp; Yenikapı) için prototip çalışıyor.
+    </div>
+  </div>
+</div>
+
+<script>
+function getArrow(direction) {
+  return direction === "backward" ? "⬅⬅⬅⬅⬅" : "➜➜➜➜➜";
+}
+
+const stations = {
+  VEZNECILER: {
+    id: "VEZNECILER",
+    name: "M2 – Vezneciler",
+    direction: "forward",   // sağa doğru
+    platformLength: 100,
+    numCars: 8,
+    doorsPerCar: 4,
+    exits: [
+      {
+        name: "İstanbul Üniversitesi yönü (Asansör)",
+        position: 10,
+        type: ["elevator"],
+        isTransfer: false
+      },
+      {
+        name: "İÜ & 15 Temmuz Caddesi (Yürüyen Merdiven)",
+        position: 50,
+        type: ["escalator"],
+        isTransfer: false
+      },
+      {
+        name: "15 Temmuz Caddesi yönü (Asansör)",
+        position: 90,
+        type: ["elevator"],
+        isTransfer: false
+      }
+    ]
+  },
+  YENIKAPI: {
+    id: "YENIKAPI",
+    name: "M2 – Yenikapı",
+    direction: "backward",  // sola doğru (demo için)
+    platformLength: 110,
+    numCars: 8,
+    doorsPerCar: 4,
+    exits: [
+      {
+        name: "M1 Metro aktarma (Yürüyen Merdiven)",
+        position: 20,
+        type: ["escalator"],
+        isTransfer: true
+      },
+      {
+        name: "Marmaray aktarma (Yürüyen Merdiven)",
+        position: 60,
+        type: ["escalator"],
+        isTransfer: true
+      },
+      {
+        name: "Yenikapı Meydan / Sahil (Asansör + Merdiven)",
+        position: 90,
+        type: ["elevator","escalator"],
+        isTransfer: false
+      }
+    ]
+  }
+};
+
+const startStationEl   = document.getElementById("startStation");
+const endStationEl     = document.getElementById("endStation");
+const directionPill    = document.getElementById("directionPill");
+const resultEl         = document.getElementById("result");
+const trainCardEl      = document.getElementById("trainCard");
+const trainTitleEl     = document.getElementById("trainTitle");
+const trainCarsEl      = document.getElementById("trainCars");
+const trainDirectionEl = document.getElementById("trainDirection");
+
+function getSelectedMode() {
+  const radios = document.querySelectorAll("input[name='mode']");
+  for (const r of radios) {
+    if (r.checked) return r.value;
+  }
+  return "escalator";
+}
+
+function updateDirectionLabel() {
+  const st = stations[endStationEl.value];
+  directionPill.innerHTML =
+    '<span class="pill-dot"></span>' +
+    "Tren bu yönde gidiyor: " + getArrow(st.direction);
+}
+
+function chooseExitsByMode(station, mode) {
+  let exits = station.exits;
+
+  if (mode === "escalator") {
+    const filtered = exits.filter(e => e.type.includes("escalator"));
+    if (filtered.length) exits = filtered;
+  } else if (mode === "elevator") {
+    const filtered = exits.filter(e => e.type.includes("elevator"));
+    if (filtered.length) exits = filtered;
+  } else if (mode === "transfer") {
+    const filtered = exits.filter(e => e.isTransfer);
+    if (filtered.length) exits = filtered;
+  } else if (mode === "exit") {
+    const filtered = exits.filter(e => !e.isTransfer);
+    if (filtered.length) exits = filtered;
+  }
+
+  const center = station.platformLength / 2;
+  let best = exits[0];
+  let bestDiff = Math.abs(best.position - center);
+  for (const e of exits) {
+    const diff = Math.abs(e.position - center);
+    if (diff < bestDiff) {
+      best = e;
+      bestDiff = diff;
+    }
+  }
+  return best;
+}
+
+function computeBestCar(station, pos) {
+  const carLength = station.platformLength / station.numCars;
+  let carIndex = Math.floor(pos / carLength);
+  if (carIndex >= station.numCars) carIndex = station.numCars - 1;
+  if (carIndex < 0) carIndex = 0;
+  return { car: carIndex + 1 };
+}
+
+function renderTrain(station, bestCarNumber) {
+  trainCarsEl.innerHTML = "";
+  for (let i = 1; i <= station.numCars; i++) {
+    const car = document.createElement("div");
+    car.className = "car" + (i === bestCarNumber ? " active" : "");
+    trainCarsEl.appendChild(car);
+  }
+}
+
+function modeText(mode) {
+  if (mode === "escalator") return "Yürüyen merdivene en yakın vagon";
+  if (mode === "elevator") return "Asansöre en yakın vagon";
+  if (mode === "exit")      return "Çıkışa en yakın vagon";
+  if (mode === "transfer")  return "Aktarmaya en yakın vagon";
+  return "";
+}
+
+function calculate() {
+  const station = stations[endStationEl.value];
+  const mode    = getSelectedMode();
+
+  const exit = chooseExitsByMode(station, mode);
+  const best = computeBestCar(station, exit.position);
+
+  resultEl.style.display = "block";
+  resultEl.innerHTML =
+    "<b>Başlangıç:</b> " + stations[startStationEl.value].name + "<br>" +
+    "<b>İniş:</b> " + station.name + "<br>" +
+    "<b>Seçilen hedef:</b> " + modeText(mode) + "<br>" +
+    "<b>Önerilen çıkış:</b> " + exit.name + "<br>" +
+    "<b>En uygun vagon:</b> " + best.car + ". vagon";
+
+  trainCardEl.style.display = "block";
+  trainTitleEl.textContent  = "En uygun vagon: " + best.car + ". vagon";
+  trainDirectionEl.textContent =
+    "Tren bu yönde gidiyor: " + getArrow(station.direction);
+  renderTrain(station, best.car);
+}
+
+// eventler
+endStationEl.addEventListener("change", updateDirectionLabel);
+document.getElementById("calcBtn").addEventListener("click", calculate);
+
+// ilk yükleme
+updateDirectionLabel();
+</script>
+</body>
+</html>
